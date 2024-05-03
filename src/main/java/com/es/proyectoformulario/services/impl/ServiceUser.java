@@ -3,7 +3,6 @@ package com.es.proyectoformulario.services.impl;
 import com.es.proyectoformulario.model.User;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ServiceUser {
 
@@ -21,7 +20,23 @@ public class ServiceUser {
         this.logger = new ServiceLogger();
     }
 
-
+    public boolean altaUsuario(User u) {
+        if (u.getId().length() > 20 || u.getName().length() > 20 || u.getPass().length() > 20) {
+            return false;
+        } else {
+            if (u.getId().contains(":") || u.getName().contains(":") || u.getPass().contains(":")) {
+                return  false;
+            } else {
+                if (checkUser(u.getId(), u.getPass())) {
+                    return false;
+                } else {
+                    gestionUser.anadirFichero(u, ruta);
+                    users.add(u);
+                    return true;
+                }
+            }
+        }
+    }
     public boolean checkUser(String idUser, String password) {
         for (int i = 0; i < this.users.size(); i++) {
             User usuario = this.users.get(i); // usuario es el elemento de la posicion i de users
